@@ -14,7 +14,8 @@ curr_dir = Path(__file__).parent
 print(curr_dir)
 env_path = curr_dir.parent.parent / '.env'
 print(env_path)
-vectordatabase_path = curr_dir.parent.parent / 'etl'
+# vectordatabase_path = curr_dir.parent.parent / 'etl'
+vectordatabase_path = curr_dir.parent / 'datavector'
 print(vectordatabase_path)
 load_dotenv(dotenv_path=env_path, override=True)
 cohere_api_key = os.getenv("COHERE_API_KEY")
@@ -70,23 +71,23 @@ def process_question(question, chain):
     response_with_emojis = add_emojis(response_text)
     return response_with_emojis
 
-def create_prompt_translated2(user_question, context):
-    relevant_chunk = query_embeddings(question)    
-    # (ingles, # espanol, portugues).
-    template = """
-    La respuesta a la siguiente pregunta debe ser breve, en una sola oración, en idioma {language} en tercera persona, y agregar emojis relacionados con el contenido:
-    Contexto: {context}
-    Pregunta: {question}
-    Respuesta:
-    """
-    prompt = PromptTemplate(input_variables=["question", "context", "language"], template=template)
-    llm = cohere(api_key=cohere_api_key, model="command-xlarge-nightly", temperature=0.5, max_tokens=100)
-    chain = LLMChain(llm=llm, prompt=prompt) # deprecated
-    # Ejemplo de uso
-    question = "¿Cuál es la capital de Francia?"
-    language = detect(question)
-    response = process_question(question, chain)
-    return response
+# def create_prompt_translated2(user_question, context):
+#     relevant_chunk = query_embeddings(question)    
+#     # (ingles, # espanol, portugues).
+#     template = """
+#     La respuesta a la siguiente pregunta debe ser breve, en una sola oración, en idioma {language} en tercera persona, y agregar emojis relacionados con el contenido:
+#     Contexto: {context}
+#     Pregunta: {question}
+#     Respuesta:
+#     """
+#     prompt = PromptTemplate(input_variables=["question", "context", "language"], template=template)
+#     llm = cohere(api_key=cohere_api_key, model="command-xlarge-nightly", temperature=0.5, max_tokens=100)
+#     chain = LLMChain(llm=llm, prompt=prompt) # deprecated
+#     # Ejemplo de uso
+#     question = "¿Cuál es la capital de Francia?"
+#     language = detect(question)
+#     response = process_question(question, chain)
+#     return response
 
 
 def generate_response(question, context):
