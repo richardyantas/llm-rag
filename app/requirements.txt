@@ -1,0 +1,17 @@
+langchain
+langchain_community
+langchain-core
+langchain-experimental
+langgraph
+langserve[all]
+langchain-cli
+langchain_chroma
+Flask
+cohere
+chromadb
+langdetect
+googletrans==4.0.0-rc1
+python-dotenv
+fastapi
+uvicorn
+emoji
