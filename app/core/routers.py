@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from app.app.models import QueryRequest, QueryResponse
-from app.app.rag import generate_answer
+from app.core.models import QueryRequest, QueryResponse
+from app.core.rag import generate_answer
 # from app.app.prompts import apply_prompt
 
 query_router = APIRouter()

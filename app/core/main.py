@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.app.routers import query_router
+from app.core.routers import query_router
 
 app = FastAPI()
 

@@ -1,3 +1,7 @@
+
+test:
+	python -m unittest discover -s app/tests -p "*.py"
+
 update-conda:
 	conda env update --file environment.yml --prune
 

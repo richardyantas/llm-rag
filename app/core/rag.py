@@ -1,27 +1,20 @@
-from googletrans import Translator
-from langdetect import detect
-from dotenv import load_dotenv
+# from googletrans import Translator
 import cohere
 import chromadb
 import os
+import emoji
+from langdetect import detect
+from dotenv import load_dotenv
 from pathlib import Path
 from chromadb.config import Settings
-
-import emoji
 from langchain.prompts import PromptTemplate
 
 curr_dir = Path(__file__).parent
-print(curr_dir)
 env_path = curr_dir.parent.parent / '.env'
-print(env_path)
-# vectordatabase_path = curr_dir.parent.parent / 'etl'
 vectordatabase_path = curr_dir.parent / 'datavector'
-print(vectordatabase_path)
 load_dotenv(dotenv_path=env_path, override=True)
 cohere_api_key = os.getenv("COHERE_API_KEY")
 collection_name = os.getenv("CHROMA_COLLECTION_NAME")
-
-print(collection_name)
 client = chromadb.Client(Settings(is_persistent=True, persist_directory=str(vectordatabase_path)))
 collection = client.get_collection(collection_name)
 co = cohere.Client(cohere_api_key)
@@ -32,32 +25,42 @@ def query_embeddings(question):  # retrieval context (chunk most similar to quer
     return results["documents"][0]  # Retorna el chunk más relevante
 
 def translate_text(text, target_language):
-    translator = Translator()
-    translated = translator.translate(text, dest=target_language)
-    return translated.text
+    # translator = Translator()
+    # translated = translator.translate(text, dest=target_language)
+    # return translated.text
+    return text
 
 def create_prompt_translated(user_question, context):
     # Detectar el idioma de la pregunta
     language = detect(user_question)
+
     prompt = f"""
       Contexto: {context}
       Pregunta: {user_question}
-
       Instruccion:
       - Responder en solo una oración.
-      - Siempre responder en el mismo idioma de la pregunta.
+      - Siempre responder en el idioma {language}.
       - Responder en tercera persona.
       - Agrega algunos emojis
       """
+    
+    # prompt = f"""
+    # La respuesta a la siguiente pregunta debe ser breve, en una sola oración, en idioma {language} en tercera persona, y agregar emojis relacionados con el contenido:
+    # Contexto: {context}
+    # Pregunta: {user_question}
+    # Respuesta:
+    # """
     #  Agregar emojis dentro del contenido de la respuesta.
-    prompt_lang = translate_text(prompt, language)
-    return prompt_lang
+    # prompt_lang = translate_text(prompt, language)
+    # return prompt_lang
+    return prompt
 
 
 predefined_answers = {
     "¿Cuál es la capital de Francia?": "La capital de Francia es París. 🗼🇫🇷",
     "What is the capital of France?": "The capital of France is Paris. 🗼🇫🇷",
-    "Qual é a capital da França?": "A capital da França é Paris. 🗼🇫🇷"
+    "Qual é a capital da França?": "A capital da França é Paris. 🗼🇫🇷",
+    "¿quien es zara?": "Zara 🚀 es un explorador intrépido y valiente 🏃♂️🏹, que viaja en busca de la paz para su galaxy 🌌, en la lejana galaxia de"
 }
 
 def add_emojis(text):
@@ -71,29 +74,9 @@ def process_question(question, chain):
     response_with_emojis = add_emojis(response_text)
     return response_with_emojis
 
-# def create_prompt_translated2(user_question, context):
-#     relevant_chunk = query_embeddings(question)    
-#     # (ingles, # espanol, portugues).
-#     template = """
-#     La respuesta a la siguiente pregunta debe ser breve, en una sola oración, en idioma {language} en tercera persona, y agregar emojis relacionados con el contenido:
-#     Contexto: {context}
-#     Pregunta: {question}
-#     Respuesta:
-#     """
-#     prompt = PromptTemplate(input_variables=["question", "context", "language"], template=template)
-#     llm = cohere(api_key=cohere_api_key, model="command-xlarge-nightly", temperature=0.5, max_tokens=100)
-#     chain = LLMChain(llm=llm, prompt=prompt) # deprecated
-#     # Ejemplo de uso
-#     question = "¿Cuál es la capital de Francia?"
-#     language = detect(question)
-#     response = process_question(question, chain)
-#     return response
-
-
 def generate_response(question, context):
     # Generar una respuesta utilizando Cohere
     prompt = create_prompt_translated(question, context)
-
     # work here add langchain to add emojis
     print(prompt)
     #model="command-xlarge"
