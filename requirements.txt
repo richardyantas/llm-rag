@@ -1,5 +1,0 @@
-langchain
-cohere
-Flask
-chromadb
-ipykernel
