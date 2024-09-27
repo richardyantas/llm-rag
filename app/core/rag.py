@@ -33,9 +33,8 @@ def translate_text(text, target_language):
 languages = {
     "en": "english",
     "es": "español",
-    "po": "Português"
+    "pt": "Português"
 } 
-
 
 def create_prompt_translated(user_question, context):
     language = detect(user_question)
@@ -80,7 +79,8 @@ def generate_answer(question):
     return response
 
 # question = "Qual è il nome del fiore magico?"
-question = "¿who is zara?"
-response = generate_answer(question)
-print(response)
-print(detect(response))
+# question = "¿O que Zara está fazendo?"
+# print(detect(question))
+# response = generate_answer(question)
+# print(response)
+# print(detect(response))
