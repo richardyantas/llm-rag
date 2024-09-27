@@ -16,4 +16,6 @@ For testing the project either using option 1 or 2, use the following code.
 
 # test FastAPI
 `curl -X POST "http://localhost:8000/query" -H "Content-Type: application/json" -d '{"query": "¿quien es zara?"}' `
+`curl -X POST "http://localhost:8000/query" -H "Content-Type: application/json" -d '{"query": "O que Zara está fazendo?"}' `
+`curl -X POST "http://localhost:8000/query" -H "Content-Type: application/json" -d '{"query": "¿who is zara"}' `
 

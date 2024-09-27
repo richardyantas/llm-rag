@@ -31,9 +31,9 @@ def translate_text(text, target_language):
     return text
 
 languages = {
-    "en": "english",
+    "en": "ingles",
     "es": "español",
-    "pt": "Português"
+    "pt": "Portugues"
 } 
 
 def create_prompt_translated(user_question, context):
