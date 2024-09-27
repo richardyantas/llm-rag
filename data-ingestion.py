@@ -21,6 +21,7 @@ def insert_embeddings_in_chromadb(collection, chunks, embeddings):
         )
 
 curr_dir = Path(__file__).parent
+persist_dir = curr_dir / 'app' / 'datavector'
 env_path = curr_dir / '.env' 
 datalake_path = curr_dir / 'data' 
 pdf_path = datalake_path / 'documento.pdf'# os.getenv("DATALAKE_PATH")
@@ -28,7 +29,7 @@ load_dotenv(dotenv_path=env_path, override=True)
 cohere_api_key = os.getenv("COHERE_API_KEY")
 collection_name = os.getenv("CHROMA_COLLECTION_NAME")
 print(collection_name)
-client = chromadb.Client(Settings(is_persistent=True, persist_directory=str(curr_dir)))
+client = chromadb.Client(Settings(is_persistent=True, persist_directory=str(persist_dir)))
 collection = client.get_or_create_collection(collection_name)
 chunks = extract_text_from_pdf(pdf_path)
 co = cohere.Client(cohere_api_key)
