@@ -30,6 +30,13 @@ def translate_text(text, target_language):
     # return translated.text
     return text
 
+languages = {
+    "en": "english",
+    "es": "español",
+    "po": "Português"
+} 
+
+
 def create_prompt_translated(user_question, context):
     language = detect(user_question)
     prompt = f"""
@@ -37,10 +44,12 @@ def create_prompt_translated(user_question, context):
       Pregunta: {user_question}
       Instruccion:
       - Responder en solo una oración.
-      - Siempre responder en el idioma {language}.
+      - Siempre responder en el idioma {languages[language]}.
       - Responder en tercera persona.
       - Reemplaza algunos palabras por emojis que resuman la oración
       """
+    
+    print("prompt:", prompt)
     return prompt
 
 
