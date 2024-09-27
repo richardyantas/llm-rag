@@ -43,23 +43,12 @@ def create_prompt_translated(user_question, context):
       - Responder en tercera persona.
       - Agrega algunos emojis
       """
-    
-    # prompt = f"""
-    # La respuesta a la siguiente pregunta debe ser breve, en una sola oración, en idioma {language} en tercera persona, y agregar emojis relacionados con el contenido:
-    # Contexto: {context}
-    # Pregunta: {user_question}
-    # Respuesta:
-    # """
-    #  Agregar emojis dentro del contenido de la respuesta.
-    # prompt_lang = translate_text(prompt, language)
-    # return prompt_lang
+    # Agregar emojis dentro del contenido de la respuesta.
+    # prompt_lang = translate_text(prompt, language)    
     return prompt
 
 
 predefined_answers = {
-    "¿Cuál es la capital de Francia?": "La capital de Francia es París. 🗼🇫🇷",
-    "What is the capital of France?": "The capital of France is Paris. 🗼🇫🇷",
-    "Qual é a capital da França?": "A capital da França é Paris. 🗼🇫🇷",
     "¿quien es zara?": "Zara 🚀 es un explorador intrépido y valiente 🏃♂️🏹, que viaja en busca de la paz para su galaxy 🌌, en la lejana galaxia de"
 }
 
@@ -72,6 +61,7 @@ def process_question(question, chain):
     # Generar una respuesta en función del idioma detectado
     response_text = chain.run(question)
     response_with_emojis = add_emojis(response_text)
+    predefined_answers[question] = response_with_emojis
     return response_with_emojis
 
 def generate_response(question, context):
