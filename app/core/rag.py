@@ -31,9 +31,7 @@ def translate_text(text, target_language):
     return text
 
 def create_prompt_translated(user_question, context):
-    # Detectar el idioma de la pregunta
     language = detect(user_question)
-
     prompt = f"""
       Contexto: {context}
       Pregunta: {user_question}
@@ -41,10 +39,8 @@ def create_prompt_translated(user_question, context):
       - Responder en solo una oración.
       - Siempre responder en el idioma {language}.
       - Responder en tercera persona.
-      - Agrega algunos emojis
+      - Agrega algunos emojis que resuman la oración
       """
-    # Agregar emojis dentro del contenido de la respuesta.
-    # prompt_lang = translate_text(prompt, language)    
     return prompt
 
 
@@ -55,38 +51,27 @@ predefined_answers = {
 def add_emojis(text):
     return emoji.emojize(text, use_aliases=True)
 
-def process_question(question, chain):    
+def generate_response(question, context):
     if question in predefined_answers:
         return predefined_answers[question]    
-    # Generar una respuesta en función del idioma detectado
-    response_text = chain.run(question)
-    response_with_emojis = add_emojis(response_text)
-    predefined_answers[question] = response_with_emojis
-    return response_with_emojis
-
-def generate_response(question, context):
-    # Generar una respuesta utilizando Cohere
-    prompt = create_prompt_translated(question, context)
-    # work here add langchain to add emojis
-    print(prompt)
-    #model="command-xlarge"
+    prompt = create_prompt_translated(question, context)    
     response = co.generate(prompt=prompt,
                            max_tokens=50,  # Ajusta el número de tokens según sea necesario
                            temperature=0.5 # Ajusta la temperatura para variar la creatividad
                            ).generations[0].text
-    return response
+    response_with_emojis = add_emojis(response)
+    predefined_answers[question] = response_with_emojis
+    return response_with_emojis
 
 
 def generate_answer(question):
-    # question = "Qual è il nome del fiore magico?"
     relevant_chunk = query_embeddings(question)    
     response = generate_response(question, relevant_chunk)
     print(response)
-    # print(detect(response)) # error
     return response
 
 # question = "Qual è il nome del fiore magico?"
-# relevant_chunk = query_embeddings(question)    
-# response = generate_response(question, relevant_chunk)
+# question = "¿quien es zara?"
+# response = generate_answer(question)
 # print(response)
-# # print(detect(response))
+# print(detect(response))
