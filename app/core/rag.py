@@ -39,7 +39,7 @@ def create_prompt_translated(user_question, context):
       - Responder en solo una oración.
       - Siempre responder en el idioma {language}.
       - Responder en tercera persona.
-      - Agrega algunos emojis que resuman la oración
+      - Reemplaza algunos palabras por emojis que resuman la oración
       """
     return prompt
 
@@ -59,9 +59,9 @@ def generate_response(question, context):
                            max_tokens=50,  # Ajusta el número de tokens según sea necesario
                            temperature=0.5 # Ajusta la temperatura para variar la creatividad
                            ).generations[0].text
-    response_with_emojis = add_emojis(response)
-    predefined_answers[question] = response_with_emojis
-    return response_with_emojis
+    # response = add_emojis(response)
+    predefined_answers[question] = response
+    return response
 
 
 def generate_answer(question):
@@ -71,7 +71,7 @@ def generate_answer(question):
     return response
 
 # question = "Qual è il nome del fiore magico?"
-# question = "¿quien es zara?"
-# response = generate_answer(question)
-# print(response)
-# print(detect(response))
+question = "¿who is zara?"
+response = generate_answer(question)
+print(response)
+print(detect(response))
